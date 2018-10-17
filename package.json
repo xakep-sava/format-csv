@@ -1,0 +1,32 @@
+{
+  "name": "format-csv",
+  "version": "1.0.0",
+  "description": "Parsing csv and replacing symbols on tag ul",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xakep-sava/format-csv.git"
+  },
+  "keywords": [
+    "csv",
+    "parse",
+    "replace",
+    "ul",
+    "li",
+    "\\n",
+    "\\r",
+    "comma"
+  ],
+  "author": "Vladimir Savrov",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/xakep-sava/format-csv/issues"
+  },
+  "homepage": "https://github.com/xakep-sava/format-csv#readme",
+  "dependencies": {
+    "csv-parser": "^2.0.0"
+  }
+}
