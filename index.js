@@ -24,14 +24,14 @@ fs.createReadStream("input/" + fileName)
       var currentValue = data[k].trim();
 
       if (currentValue) {
-        if (currentValue.indexOf(',') > -1) {
-          currentValue = wrapTag(currentValue, ',');
-        } else if (currentValue.indexOf('\n') > -1) {
+        if (currentValue.indexOf('\n') > -1) {
           currentValue = wrapTag(currentValue, '\n');
         } else if (currentValue.indexOf('\r') > -1) {
           currentValue = wrapTag(currentValue, '\r');
         } else if (currentValue.indexOf('\r\n') > -1) {
           currentValue = wrapTag(currentValue, '\r\n');
+        } else if (currentValue.indexOf(',') > -1) {
+          currentValue = wrapTag(currentValue, ',');
         }
 
         if (currentValue.indexOf(' ') > -1) {
@@ -66,7 +66,7 @@ function wrapTag(str, spliceSymbol) {
     }) + '</ul>';
   }
 
-  return str;
+  return str.replace(/[,]/g, "");
 }
 
 function escapeHtml(string) {
