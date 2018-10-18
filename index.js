@@ -1,10 +1,15 @@
 const csv = require('csv-parser');
 const fs = require('fs');
 
-const outputStream = fs.createWriteStream("output/1.csv");
-var countRow = 0;
+if (!fs.existsSync('output')) {
+  fs.mkdirSync('output');
+}
 
-fs.createReadStream('input/1.csv')
+var fileName = "1.csv";
+var countRow = 0;
+const outputStream = fs.createWriteStream("output/" + fileName);
+
+fs.createReadStream("input/" + fileName)
   .pipe(csv())
   .on('data', (data) => {
     countRow++;
@@ -16,14 +21,21 @@ fs.createReadStream('input/1.csv')
     }
 
     var output = keys.map((k) => {
-      var currentValue = data[k];
+      var currentValue = data[k].trim();
 
       if (currentValue) {
-        currentValue = formatUl(currentValue, ',');
-        currentValue = formatUl(currentValue, '\n');
+        if (currentValue.indexOf(',') > -1) {
+          currentValue = wrapTag(currentValue, ',');
+        } else if (currentValue.indexOf('\n') > -1) {
+          currentValue = wrapTag(currentValue, '\n');
+        } else if (currentValue.indexOf('\r') > -1) {
+          currentValue = wrapTag(currentValue, '\r');
+        } else if (currentValue.indexOf('\r\n') > -1) {
+          currentValue = wrapTag(currentValue, '\r\n');
+        }
 
         if (currentValue.indexOf(' ') > -1) {
-          currentValue = '"' + currentValue + '"';
+          currentValue = '"' + escapeHtml(currentValue) + '"';
         }
       } else {
         currentValue = '';
@@ -41,12 +53,24 @@ fs.createReadStream('input/1.csv')
     outputStream.end();
   });
 
-function formatUl(str, spliceSymbol) {
+function wrapTag(str, spliceSymbol) {
   if (str.indexOf(spliceSymbol) > -1) {
     str = '<ul>' + str.split(spliceSymbol).map((val) => {
-      return '<li>' + val.trim() + '</li>';
+      var valTrim = val.trim();
+
+      if (valTrim.length) {
+        valTrim = '<li>' + val.trim() + '</li>';
+      }
+
+      return valTrim;
     }) + '</ul>';
   }
 
   return str;
+}
+
+function escapeHtml(string) {
+  return String(string).replace(/["]/g, (s) => {
+    return '&quot;';
+  });
 }
