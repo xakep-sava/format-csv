@@ -1,8 +1,8 @@
-const csv = require('csv-parser');
-const fs = require('fs');
+const csv = require("csv-parser");
+const fs = require("fs");
 
-if (!fs.existsSync('output')) {
-  fs.mkdirSync('output');
+if (!fs.existsSync("output")) {
+  fs.mkdirSync("output");
 }
 
 var fileName = "1.csv";
@@ -11,7 +11,7 @@ const outputStream = fs.createWriteStream("output/" + fileName);
 
 fs.createReadStream("input/" + fileName)
   .pipe(csv())
-  .on('data', (data) => {
+  .on("data", (data) => {
     countRow++;
 
     var keys = Object.keys(data);
@@ -24,21 +24,21 @@ fs.createReadStream("input/" + fileName)
       var currentValue = data[k].trim();
 
       if (currentValue) {
-        if (currentValue.indexOf('\n') > -1) {
-          currentValue = wrapTag(currentValue, '\n');
-        } else if (currentValue.indexOf('\r') > -1) {
-          currentValue = wrapTag(currentValue, '\r');
-        } else if (currentValue.indexOf('\r\n') > -1) {
-          currentValue = wrapTag(currentValue, '\r\n');
-        } else if (currentValue.indexOf(',') > -1) {
-          currentValue = wrapTag(currentValue, ',');
+        if (currentValue.indexOf("\n") > -1) {
+          currentValue = wrapTag(currentValue, "\n");
+        } else if (currentValue.indexOf("\r") > -1) {
+          currentValue = wrapTag(currentValue, "\r");
+        } else if (currentValue.indexOf("\r\n") > -1) {
+          currentValue = wrapTag(currentValue, "\r\n");
+        } else if (currentValue.indexOf(",") > -1) {
+          currentValue = wrapTag(currentValue, ",");
         }
 
-        if (currentValue.indexOf(' ') > -1) {
+        if (currentValue.indexOf(" ") > -1) {
           currentValue = '"' + escapeHtml(currentValue) + '"';
         }
       } else {
-        currentValue = '';
+        currentValue = "";
       }
 
       return currentValue;
@@ -46,24 +46,24 @@ fs.createReadStream("input/" + fileName)
 
     outputStream.write(output + "\n");
   })
-  .on('end', () => {
-    console.log('Count row: ' + countRow);
-    console.log('Done...');
+  .on("end", () => {
+    console.log("Count row: " + countRow);
+    console.log("Done...");
 
     outputStream.end();
   });
 
 function wrapTag(str, spliceSymbol) {
   if (str.indexOf(spliceSymbol) > -1) {
-    str = '<ul>' + str.split(spliceSymbol).map((val) => {
+    str = "<ul>" + str.split(spliceSymbol).map((val) => {
       var valTrim = val.trim();
 
       if (valTrim.length) {
-        valTrim = '<li>' + val.trim() + '</li>';
+        valTrim = "<li>" + val.trim() + "</li>";
       }
 
       return valTrim;
-    }) + '</ul>';
+    }) + "</ul>";
   }
 
   return str.replace(/[,]/g, "");
@@ -71,6 +71,6 @@ function wrapTag(str, spliceSymbol) {
 
 function escapeHtml(string) {
   return String(string).replace(/["]/g, (s) => {
-    return '&quot;';
+    return "&quot;";
   });
 }
