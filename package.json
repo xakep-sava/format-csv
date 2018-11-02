@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/xakep-sava/format-csv#readme",
   "dependencies": {
-    "csv-parser": "^2.0.0"
+    "csv-parser": "^2.0.0",
+    "csv-write-stream": "^2.0.0"
   }
 }
