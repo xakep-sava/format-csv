@@ -5,7 +5,7 @@ if (!fs.existsSync("output")) {
   fs.mkdirSync("output");
 }
 
-var fileName = "8.csv";
+var fileName = "9.csv";
 var countRow = 0;
 const outputStream = fs.createWriteStream("output/" + fileName);
 
@@ -23,8 +23,8 @@ fs.createReadStream("input/" + fileName)
     var output = keys.map((k) => {
       var currentValue = data[k].trim();
 
-      if (currentValue.length && currentValue.indexOf('"') === -1) {
-        currentValue = '"' + currentValue + '"';
+      if (currentValue.length) {
+        currentValue = '"' + escapeHtml(currentValue) + '"';
       }
 
       return currentValue;
@@ -38,3 +38,7 @@ fs.createReadStream("input/" + fileName)
 
     outputStream.end();
   });
+
+function escapeHtml(string) {
+  return string.replace('"', '""');
+}
